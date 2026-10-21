@@ -14,11 +14,17 @@ Custom CA overrides and the operating system trust store need separate review.
 
 Run `python -m unittest discover -s tests -p 'test_tls*.py'` for offline trust checks.
 The checks inspect the actual HTTPX context and Requests CA file; they make no API
-requests. Before installing dependencies, use Python 3.10 or newer and bootstrap
-pip 26.2.2 or newer using the hash-pinned wheel in the PSF advisory below. App
-Engine's managed build installer and base-image trust remain provider
-responsibilities; an application certifi pin
-does not update either one.
+requests. Before installing dependencies, create a fresh virtual environment on a
+maintained Python release, then bootstrap pip 26.2.2 or newer inside it using the
+hash-pinned wheel in the PSF advisory below. This upstream pip requires Python
+3.10 or newer; retire/recreate older unsupported environments before proceeding.
+
+For distro-managed Python, use the vendor's supported patched pip and CA updates
+or the fresh virtual environment path above. Do not bypass PEP 668 with
+`--break-system-packages`. Verify vendor backports through the vendor's security
+advisory and the effective CA bundle, rather than an upstream version number alone.
+App Engine's managed build installer and base-image trust remain provider
+responsibilities; an application certifi pin does not update either one.
 
 Sources:
 - [Mozilla incident report](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)
@@ -29,3 +35,5 @@ Package installation also requires `certifi>=2026.10.19` in `setup.py`, so insta
 this project from a wheel or source distribution retains the patched CA-bundle
 floor even without installing `requirements.txt` separately. The requirements file
 continues to define the full application environment.
+
+See [externally managed Python environments](https://packaging.python.org/en/latest/specifications/externally-managed-environments/) for the distro/virtual-environment boundary.
