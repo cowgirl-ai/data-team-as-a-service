@@ -7,7 +7,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        # Add your dependencies here
+        'certifi>=2026.10.19',
     ],
     entry_points={
         'console_scripts': [
